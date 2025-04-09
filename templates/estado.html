@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estado del Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+            text-align: center;
+        }
+        .etapa {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #ddd;
+            font-size: 1.2em;
+        }
+        .activa {
+            background-color: #28a745;
+            color: white;
+        }
+        #progreso {
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        #barra {
+            height: 100%;
+            width: 0%;
+            background-color: #28a745;
+            transition: width 1s ease;
+        }
+        .btn {
+            margin-top: 30px;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Estado de tu pedido</h1>
+    <p id="clienteInfo"></p>
+
+    <div id="etapa1" class="etapa">📥 Pedido recibido</div>
+    <div id="etapa2" class="etapa">👨‍🍳 En preparación</div>
+    <div id="etapa3" class="etapa">✅ Listo para retiro</div>
+
+    <div id="progreso">
+        <div id="barra"></div>
+    </div>
+
+    <a id="whatsappBtn" class="btn" style="display:none;" target="_blank">Enviar respaldo por WhatsApp</a>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const nombre = urlParams.get("nombre") || "Cliente";
+        const telefono = urlParams.get("telefono") || "sin número";
+
+        document.getElementById("clienteInfo").innerText = `Gracias por tu pedido, ${nombre}. Nos contactaremos a tu teléfono: ${telefono}.`;
+
+        function activarEtapa(etapaId, porcentaje) {
+            document.getElementById(etapaId).classList.add("activa");
+            document.getElementById("barra").style.width = porcentaje + "%";
+        }
+
+        function mostrarBotonWhatsApp() {
+            const mensaje = `Tu pedido ya está listo para retiro, ${nombre}. Gracias por preferirnos.`;
+            const numero = "56946646342";
+            const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+
+            const boton = document.getElementById("whatsappBtn");
+            boton.href = url;
+            boton.style.display = "inline-block";
+            boton.click();  // Esto lo dispara automáticamente ⚠️ (funciona en muchos navegadores)
+        }
+
+        // Etapas automáticas
+        setTimeout(() => activarEtapa("etapa1", 33), 1000);  // Recepción
+        setTimeout(() => activarEtapa("etapa2", 66), 8000);  // Preparación
+        setTimeout(() => {
+            activarEtapa("etapa3", 100);                      // Retiro
+            mostrarBotonWhatsApp();
+        }, 16000);
+    </script>
+</body>
+</html>
+
+

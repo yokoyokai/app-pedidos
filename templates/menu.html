@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Interactivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+        }
+        .producto, .formulario {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .ingredientes {
+            margin-top: 10px;
+        }
+        .ingredientes label {
+            display: block;
+        }
+        .btn {
+            margin-top: 15px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Haz tu pedido</h1>
+
+    <div class="producto">
+        <label for="producto">Selecciona un producto:</label>
+        <select id="producto" onchange="mostrarIngredientes()">
+            <option value="">-- Selecciona --</option>
+            <option value="hamburguesa">Hamburguesa Clásica - $5.000</option>
+            <option value="pizza">Pizza Margarita - $8.000</option>
+            <option value="completo">Completo Italiano - $3.500</option>
+        </select>
+    </div>
+
+    <form id="formularioPedido" action="/order" method="post" style="display: none;">
+        <input type="hidden" name="producto" id="productoSeleccionado">
+
+        <div id="ingredientesHamburguesa" class="ingredientes" style="display:none;">
+            <h3>Ingredientes Hamburguesa</h3>
+            <label><input type="checkbox" name="ingredientes" value="carne" checked> Carne</label>
+            <label><input type="checkbox" name="ingredientes" value="queso" checked> Queso</label>
+            <label><input type="checkbox" name="ingredientes" value="lechuga" checked> Lechuga</label>
+            <label><input type="checkbox" name="ingredientes" value="tomate" checked> Tomate</label>
+        </div>
+
+        <div id="ingredientesPizza" class="ingredientes" style="display:none;">
+            <h3>Ingredientes Pizza</h3>
+            <label><input type="checkbox" name="ingredientes" value="mozzarella" checked> Queso Mozzarella</label>
+            <label><input type="checkbox" name="ingredientes" value="salsa" checked> Salsa de Tomate</label>
+            <label><input type="checkbox" name="ingredientes" value="albahaca" checked> Albahaca</label>
+        </div>
+
+        <div id="ingredientesCompleto" class="ingredientes" style="display:none;">
+            <h3>Ingredientes Completo</h3>
+            <label><input type="checkbox" name="ingredientes" value="tomate" checked> Tomate</label>
+            <label><input type="checkbox" name="ingredientes" value="palta" checked> Palta</label>
+            <label><input type="checkbox" name="ingredientes" value="mayonesa" checked> Mayonesa</label>
+        </div>
+
+        <div class="formulario">
+            <label>Tu nombre:</label>
+            <input type="text" name="nombre" required><br><br>
+
+            <label>Teléfono:</label>
+            <input type="text" name="telefono" required><br><br>
+
+            <button type="submit" class="btn">Hacer Pedido</button>
+        </div>
+    </form>
+
+    <script>
+        function mostrarIngredientes() {
+            const seleccion = document.getElementById('producto').value;
+            document.getElementById('productoSeleccionado').value = seleccion;
+
+            document.getElementById('formularioPedido').style.display = seleccion ? 'block' : 'none';
+
+            // Ocultar todos
+            document.getElementById('ingredientesHamburguesa').style.display = 'none';
+            document.getElementById('ingredientesPizza').style.display = 'none';
+            document.getElementById('ingredientesCompleto').style.display = 'none';
+
+            if (seleccion === 'hamburguesa') {
+                document.getElementById('ingredientesHamburguesa').style.display = 'block';
+            } else if (seleccion === 'pizza') {
+                document.getElementById('ingredientesPizza').style.display = 'block';
+            } else if (seleccion === 'completo') {
+                document.getElementById('ingredientesCompleto').style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
+
