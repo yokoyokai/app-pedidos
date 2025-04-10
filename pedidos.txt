@@ -1,0 +1,8 @@
+
+==== NUEVO PEDIDO ====
+Fecha y hora: 2025-04-10 04:12:14
+Nombre: Jose
+Teléfono: 946646342
+Producto: hamburguesa
+Ingredientes modificados: carne, queso, lechuga, tomate, mozzarella, salsa, albahaca, tomate, palta, mayonesa
+------------------------

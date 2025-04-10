@@ -1,39 +1,52 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-from datetime import timedelta
+from flask import Flask, render_template, request, redirect, url_for
+import os
+import datetime
 
 app = Flask(__name__)
-app.secret_key = 'clave_secreta_segura'  # Necesario para usar session
-app.permanent_session_lifetime = timedelta(minutes=10)
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def inicio():
+    return redirect(url_for('menu'))
 
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
 
-@app.route('/order', methods=['GET', 'POST'])
-def order():
-    if request.method == 'POST':
-        # Guardamos los datos en la sesión
-        session.permanent = True
-        session['nombre'] = request.form.get('nombre')
-        session['telefono'] = request.form.get('telefono')
-        return redirect(url_for('thank_you'))
-    return render_template('order.html')
+@app.route('/order', methods=['POST'])
+def recibir_pedido():
+    nombre = request.form.get('nombre', 'Cliente')
+    telefono = request.form.get('telefono', 'Sin número')
+    producto = request.form.get('producto', 'Sin producto')
+    ingredientes = request.form.getlist('ingredientes')
+
+    fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    pedido = f"""
+==== NUEVO PEDIDO ====
+Fecha y hora: {fecha_hora}
+Nombre: {nombre}
+Teléfono: {telefono}
+Producto: {producto}
+Ingredientes modificados: {', '.join(ingredientes)}
+------------------------
+"""
+
+    with open("pedidos.txt", "a", encoding="utf-8") as archivo:
+        archivo.write(pedido)
+
+    return redirect(url_for('thank_you', nombre=nombre, telefono=telefono))
 
 @app.route('/thank-you')
 def thank_you():
-    return render_template('thank_you.html')
+    nombre = request.args.get('nombre', 'Cliente')
+    telefono = request.args.get('telefono', 'Sin número')
+    return render_template('thank_you.html', nombre=nombre, telefono=telefono)
 
 @app.route('/estado')
 def estado():
     nombre = request.args.get('nombre', 'Cliente')
     telefono = request.args.get('telefono', 'Sin número')
-
-    # Puedes ajustar estos tiempos fácilmente
-    tiempo_recepcion = 1    # en segundos
+    tiempo_recepcion = 1
     tiempo_preparacion = 8
     tiempo_retiro = 16
 
@@ -42,11 +55,8 @@ def estado():
                            tiempo_preparacion=tiempo_preparacion,
                            tiempo_retiro=tiempo_retiro)
 
-
-import os
-
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Render usa una variable PORT
+    port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
 
 
