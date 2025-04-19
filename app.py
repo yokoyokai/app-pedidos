@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
+from database import init_db, guardar_pedido, obtener_pedidos
 import os
 import datetime
 
 app = Flask(__name__)
+
+init_db()  # Esto se asegura de que la tabla 'pedidos' esté creada
 
 @app.route('/')
 def inicio():
@@ -12,29 +15,23 @@ def inicio():
 def menu():
     return render_template('menu.html')
 
-@app.route('/order', methods=['POST'])
-def recibir_pedido():
-    nombre = request.form.get('nombre', 'Cliente')
-    telefono = request.form.get('telefono', 'Sin número')
-    producto = request.form.get('producto', 'Sin producto')
-    ingredientes = request.form.getlist('ingredientes')
+@app.route('/order', methods=['GET', 'POST'])
+def order():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        telefono = request.form.get('telefono')
+        productos = request.form.getlist('producto')
+        ingredientes = request.form.getlist('ingredientes')
 
-    fecha_hora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        productos_str = ', '.join(productos)
+        ingredientes_str = ', '.join(ingredientes)
 
-    pedido = f"""
-==== NUEVO PEDIDO ====
-Fecha y hora: {fecha_hora}
-Nombre: {nombre}
-Teléfono: {telefono}
-Producto: {producto}
-Ingredientes modificados: {', '.join(ingredientes)}
-------------------------
-"""
+        # Guardar en base de datos
+        guardar_pedido(nombre, telefono, productos_str, ingredientes_str)
 
-    with open("pedidos.txt", "a", encoding="utf-8") as archivo:
-        archivo.write(pedido)
+        return render_template('thank_you.html', nombre=nombre, telefono=telefono)
 
-    return redirect(url_for('thank_you', nombre=nombre, telefono=telefono))
+    return redirect(url_for('menu'))
 
 @app.route('/thank-you')
 def thank_you():
@@ -54,6 +51,11 @@ def estado():
                            tiempo_recepcion=tiempo_recepcion,
                            tiempo_preparacion=tiempo_preparacion,
                            tiempo_retiro=tiempo_retiro)
+
+@app.route('/panel')
+def panel():
+    pedidos = obtener_pedidos()
+    return render_template('panel.html', pedidos=pedidos)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
