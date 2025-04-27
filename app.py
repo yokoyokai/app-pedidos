@@ -6,7 +6,6 @@ import datetime
 
 app = Flask(__name__)
 
-init_db()  # Esto se asegura de que la tabla 'pedidos' esté creada
 
 @app.route('/')
 def inicio():
