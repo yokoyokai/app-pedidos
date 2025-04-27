@@ -29,25 +29,31 @@
 </head>
 <body>
     <h1>Pedidos Recibidos</h1>
+
     <table>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Teléfono</th>
-            <th>Productos</th>
-            <th>Ingredientes</th>
-            <th>Fecha</th>
-        </tr>
-        {% for p in pedidos %}
-        <tr>
-            <td>{{ p[0] }}</td>
-            <td>{{ p[1] }}</td>
-            <td>{{ p[2] }}</td>
-            <td>{{ p[3] }}</td>
-            <td>{{ p[4] }}</td>
-            <td>{{ p[5] }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>ID</th> <!-- <- Agregamos aquí el ID -->
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Productos</th>
+                <th>Ingredientes</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{ pedido[0] }}</td> <!-- <- MOSTRAMOS el ID -->
+                <td>{{ pedido[1] }}</td>
+                <td>{{ pedido[2] }}</td>
+                <td>{{ pedido[3] }}</td>
+                <td>{{ pedido[4] }}</td>
+                <td>{{ pedido[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
+
 </body>
 </html>

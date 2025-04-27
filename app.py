@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from database import init_db, guardar_pedido, obtener_pedidos
+
 import os
 import datetime
 
@@ -15,23 +16,19 @@ def inicio():
 def menu():
     return render_template('menu.html')
 
-@app.route('/order', methods=['GET', 'POST'])
+@app.route('/order', methods=['POST'])
 def order():
-    if request.method == 'POST':
-        nombre = request.form.get('nombre')
-        telefono = request.form.get('telefono')
-        productos = request.form.getlist('producto')
-        ingredientes = request.form.getlist('ingredientes')
+    nombre = request.form['nombre']
+    telefono = request.form['telefono']
+    productos = request.form.getlist('productos')
+    ingredientes = request.form.getlist('ingredientes')
 
-        productos_str = ', '.join(productos)
-        ingredientes_str = ', '.join(ingredientes)
+    productos_str = ', '.join(productos)
+    ingredientes_str = ', '.join(ingredientes)
 
-        # Guardar en base de datos
-        guardar_pedido(nombre, telefono, productos_str, ingredientes_str)
+    guardar_pedido(nombre, telefono, productos_str, ingredientes_str)
 
-        return render_template('thank_you.html', nombre=nombre, telefono=telefono)
-
-    return redirect(url_for('menu'))
+    return render_template('thank_you.html', nombre=nombre, telefono=telefono)
 
 @app.route('/thank-you')
 def thank_you():
@@ -56,6 +53,11 @@ def estado():
 def panel():
     pedidos = obtener_pedidos()
     return render_template('panel.html', pedidos=pedidos)
+
+@app.route('/exportar')
+def exportar():
+    exportar_pedidos_a_txt()
+    return "✅ Respaldo creado. Busca el archivo 'respaldo_pedidos.txt' en tu carpeta del proyecto."
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
