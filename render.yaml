@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: pedidos-flask
+    name: app-pedidos
     env: python
     plan: free
     branch: main
