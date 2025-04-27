@@ -1,7 +1,17 @@
 services:
   - type: web
-    name: app-pedidos
+    name: pedidos-flask
     env: python
-    buildCommand: ""
-    startCommand: "python app.py"
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pedidos-flask-db
+          property: connectionString
+
+databases:
+  - name: pedidos-flask-db
     plan: free
