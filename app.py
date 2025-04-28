@@ -19,15 +19,23 @@ def menu():
 def order():
     nombre = request.form['nombre']
     telefono = request.form['telefono']
-    productos = request.form.getlist('productos')
-    ingredientes = request.form.getlist('ingredientes')
+    producto = request.form.get('producto')
 
-    productos_str = ', '.join(productos)
+    if producto == "hamburguesa":
+        ingredientes = request.form.getlist('ingredientes_hamburguesa')
+    elif producto == "pizza":
+        ingredientes = request.form.getlist('ingredientes_pizza')
+    elif producto == "completo":
+        ingredientes = request.form.getlist('ingredientes_completo')
+    else:
+        ingredientes = []
+
     ingredientes_str = ', '.join(ingredientes)
 
-    guardar_pedido(nombre, telefono, productos_str, ingredientes_str)
+    guardar_pedido(nombre, telefono, producto, ingredientes_str)
 
     return render_template('thank_you.html', nombre=nombre, telefono=telefono)
+
 
 @app.route('/thank-you')
 def thank_you():

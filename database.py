@@ -1,5 +1,8 @@
 import psycopg2
 import os
+import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
 # Usamos esta variable de entorno que configurarás en Render
 DATABASE_URL = os.environ.get('DATABASE_URL')

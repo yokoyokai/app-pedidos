@@ -52,41 +52,45 @@
         </select>
     </div>
 
-    <form id="formularioPedido" action="/order" method="post" style="display: none;">
-        <input type="hidden" name="producto" id="productoSeleccionado">
+<form id="formularioPedido" action="/order" method="post" style="display: none;">
+    <input type="hidden" name="producto" id="productoSeleccionado">
 
-        <div id="ingredientesHamburguesa" class="ingredientes" style="display:none;">
-            <h3>Ingredientes Hamburguesa</h3>
-            <label><input type="checkbox" name="ingredientes" value="carne" checked> Carne</label>
-            <label><input type="checkbox" name="ingredientes" value="queso" checked> Queso</label>
-            <label><input type="checkbox" name="ingredientes" value="lechuga" checked> Lechuga</label>
-            <label><input type="checkbox" name="ingredientes" value="tomate" checked> Tomate</label>
-        </div>
+    <!-- Hamburguesa -->
+    <div id="ingredientesHamburguesa" class="ingredientes" style="display:none;">
+        <h3>Ingredientes Hamburguesa</h3>
+        <label><input type="checkbox" name="ingredientes_hamburguesa" value="carne" checked> Carne</label>
+        <label><input type="checkbox" name="ingredientes_hamburguesa" value="queso" checked> Queso</label>
+        <label><input type="checkbox" name="ingredientes_hamburguesa" value="lechuga" checked> Lechuga</label>
+        <label><input type="checkbox" name="ingredientes_hamburguesa" value="tomate" checked> Tomate</label>
+    </div>
 
-        <div id="ingredientesPizza" class="ingredientes" style="display:none;">
-            <h3>Ingredientes Pizza</h3>
-            <label><input type="checkbox" name="ingredientes" value="mozzarella" checked> Queso Mozzarella</label>
-            <label><input type="checkbox" name="ingredientes" value="salsa" checked> Salsa de Tomate</label>
-            <label><input type="checkbox" name="ingredientes" value="albahaca" checked> Albahaca</label>
-        </div>
+    <!-- Pizza -->
+    <div id="ingredientesPizza" class="ingredientes" style="display:none;">
+        <h3>Ingredientes Pizza</h3>
+        <label><input type="checkbox" name="ingredientes_pizza" value="mozzarella" checked> Queso Mozzarella</label>
+        <label><input type="checkbox" name="ingredientes_pizza" value="salsa" checked> Salsa de Tomate</label>
+        <label><input type="checkbox" name="ingredientes_pizza" value="albahaca" checked> Albahaca</label>
+    </div>
 
-        <div id="ingredientesCompleto" class="ingredientes" style="display:none;">
-            <h3>Ingredientes Completo</h3>
-            <label><input type="checkbox" name="ingredientes" value="tomate" checked> Tomate</label>
-            <label><input type="checkbox" name="ingredientes" value="palta" checked> Palta</label>
-            <label><input type="checkbox" name="ingredientes" value="mayonesa" checked> Mayonesa</label>
-        </div>
+    <!-- Completo -->
+    <div id="ingredientesCompleto" class="ingredientes" style="display:none;">
+        <h3>Ingredientes Completo</h3>
+        <label><input type="checkbox" name="ingredientes_completo" value="tomate" checked> Tomate</label>
+        <label><input type="checkbox" name="ingredientes_completo" value="palta" checked> Palta</label>
+        <label><input type="checkbox" name="ingredientes_completo" value="mayonesa" checked> Mayonesa</label>
+    </div>
 
-        <div class="formulario">
-            <label>Tu nombre:</label>
-            <input type="text" name="nombre" required><br><br>
+    <div class="formulario">
+        <label>Tu nombre:</label>
+        <input type="text" name="nombre" required><br><br>
 
-            <label>Teléfono:</label>
-            <input type="text" name="telefono" required><br><br>
+        <label>Teléfono:</label>
+        <input type="text" name="telefono" required><br><br>
 
-            <button type="submit" class="btn">Hacer Pedido</button>
-        </div>
-    </form>
+        <button type="submit" class="btn">Hacer Pedido</button>
+    </div>
+</form>
+
 
     <script>
         function mostrarIngredientes() {
