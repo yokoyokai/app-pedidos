@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import pytz  # <-- Agrega esto arriba si no lo tienes
 import datetime
 from dotenv import load_dotenv
 load_dotenv()
@@ -7,22 +8,13 @@ load_dotenv()
 # Usamos esta variable de entorno que configurarás en Render
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-def conectar():
-    return psycopg2.connect(DATABASE_URL)
-
-import datetime  # Esto debe estar arriba del todo en database.py (por si no lo tienes)
-
 def guardar_pedido(nombre, telefono, productos, ingredientes):
     conn = conectar()
     cur = conn.cursor()
 
     # obtener fecha y hora actual
-    import pytz  # <-- Agrega esto arriba si no lo tienes
-
-# Cambiar UTC a hora de Chile automáticamente
-chile = pytz.timezone('America/Santiago')
-fecha = datetime.datetime.now(chile).strftime('%Y-%m-%d %H:%M:%S')
-
+    chile = pytz.timezone('America/Santiago')
+    fecha = datetime.datetime.now(chile).strftime('%Y-%m-%d %H:%M:%S')
 
     cur.execute(
         "INSERT INTO pedidos (nombre, telefono, productos, ingredientes, fecha) VALUES (%s, %s, %s, %s, %s)",
