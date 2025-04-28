@@ -17,7 +17,12 @@ def guardar_pedido(nombre, telefono, productos, ingredientes):
     cur = conn.cursor()
 
     # obtener fecha y hora actual
-    fecha = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    import pytz  # <-- Agrega esto arriba si no lo tienes
+
+# Cambiar UTC a hora de Chile automáticamente
+chile = pytz.timezone('America/Santiago')
+fecha = datetime.datetime.now(chile).strftime('%Y-%m-%d %H:%M:%S')
+
 
     cur.execute(
         "INSERT INTO pedidos (nombre, telefono, productos, ingredientes, fecha) VALUES (%s, %s, %s, %s, %s)",
