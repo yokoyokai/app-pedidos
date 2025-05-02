@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from database import init_db, guardar_pedido, obtener_pedidos
-
+from usuarios import crear_usuario, validar_usuario  # << agrega esto arriba
 import os
 import datetime
 
 app = Flask(__name__)
+app.secret_key = 'mango'  # Aquí sí va bien ✅
+
+init_db()
 
 
 @app.route('/')
@@ -56,10 +59,44 @@ def estado():
                            tiempo_preparacion=tiempo_preparacion,
                            tiempo_retiro=tiempo_retiro)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if validar_usuario(username, password):
+            session['usuario'] = username
+            return redirect(url_for('panel'))
+        else:
+            return "❌ Usuario o contraseña incorrecta."
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('usuario', None)
+    return redirect(url_for('login'))
+
 @app.route('/panel')
 def panel():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
     pedidos = obtener_pedidos()
     return render_template('panel.html', pedidos=pedidos)
+
+@app.route('/crear-local', methods=['GET', 'POST'])
+def crear_local():
+    if request.method == 'POST':
+        usuario = request.form['usuario']
+        contrasena = request.form['contrasena']
+        crear_usuario(usuario, contrasena)
+        return "✅ Local creado exitosamente."
+    return '''
+        <form method="POST">
+            Usuario: <input type="text" name="usuario" required><br>
+            Contraseña: <input type="password" name="contrasena" required><br>
+            <input type="submit" value="Crear Local">
+        </form>
+    '''
 
 @app.route('/exportar')
 def exportar():
